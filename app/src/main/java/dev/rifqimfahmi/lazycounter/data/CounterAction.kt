@@ -5,5 +5,5 @@ sealed class CounterAction(
 ) {
     class Increment(value: Int) : CounterAction(value)
     class Decrement(value: Int) : CounterAction(value)
-    class Neutral(value: Int) : CounterAction(value)
+    class Reset(value: Int) : CounterAction(value)
 }

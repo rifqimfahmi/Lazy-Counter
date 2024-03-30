@@ -1,7 +1,5 @@
 package dev.rifqimfahmi.lazycounter.viewmodel
 
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dev.rifqimfahmi.lazycounter.data.CounterAction
@@ -22,5 +20,9 @@ class CounterViewModel: ViewModel() {
         if (nextValue >= 0) {
             _count.value = CounterAction.Decrement(nextValue)
         }
+    }
+
+    fun reset() {
+        _count.value = CounterAction.Decrement(0)
     }
 }
