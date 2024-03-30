@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import dev.rifqimfahmi.lazycounter.data.CounterAction
 import dev.rifqimfahmi.lazycounter.ui.theme.LazyCounterTheme
 import dev.rifqimfahmi.lazycounter.view.CounterController
 import dev.rifqimfahmi.lazycounter.viewmodel.CounterViewModel
@@ -33,6 +34,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.math.max
+import kotlin.math.min
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,18 +84,32 @@ fun CounterNumber(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val charState by viewModel.count.observeAsState(0)
+        val charState by viewModel.count.observeAsState(CounterAction.Neutral(0))
         AnimatedContent(
-            targetState = charState,
+            targetState = charState.value,
             transitionSpec = {
-                slideInVertically { it } togetherWith slideOutVertically { -it }
+                slideInVertically {
+                    when (charState) {
+                        is CounterAction.Increment -> it
+                        is CounterAction.Decrement -> -it
+                        else -> it
+                    }
+                } togetherWith slideOutVertically {
+                    when (charState) {
+                        is CounterAction.Increment -> -it
+                        is CounterAction.Decrement -> it
+                        else -> -it
+                    }
+                }
             },
             label = "anim"
         ) { char ->
+            val multiplier = min(((char * 0.03) + 1), 3.0)
             Text(
                 modifier = Modifier,
                 text = char.toString(),
-                fontSize = 20.sp
+                style = MaterialTheme.typography.titleMedium,
+                fontSize = 45.sp * multiplier
             )
         }
     }

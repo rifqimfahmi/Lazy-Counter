@@ -4,21 +4,23 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dev.rifqimfahmi.lazycounter.data.CounterAction
 
 class CounterViewModel: ViewModel() {
 
-    private val _count = MutableLiveData(0)
+    private val _count = MutableLiveData<CounterAction>()
     val count get() = _count
 
 
     fun increase() {
-        _count.value = (_count.value ?: 0) + 1
+        val nextValue = (_count.value?.value ?: 0) + 1
+        _count.value = CounterAction.Increment(nextValue)
     }
 
     fun decrease() {
-        val newValue = (_count.value ?: 0) - 1
-        if (newValue >= 0) {
-            _count.value = newValue
+        val nextValue = (_count.value?.value ?: 0) - 1
+        if (nextValue >= 0) {
+            _count.value = CounterAction.Decrement(nextValue)
         }
     }
 }

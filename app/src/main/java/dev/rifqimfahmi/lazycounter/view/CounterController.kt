@@ -19,6 +19,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.math.max
 
 
 @Composable
@@ -57,14 +58,18 @@ private fun TriggerButton(
                     longPressJob = coroutineScope.launch {
                         delay(500)
                         // long click start below
+                        var delay = 100L
                         while (true) {
+                            delay = max(delay, 60)
                             onClick.invoke()
-                            delay(100)
+                            delay(delay)
+                            delay--
                         }
                     }
                 }
 
-                is PressInteraction.Release -> {
+                is PressInteraction.Release ,
+                is PressInteraction.Cancel-> {
                     longPressJob?.cancel()
                 }
             }
