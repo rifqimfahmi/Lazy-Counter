@@ -60,7 +60,10 @@ private fun TriggerButton(
                         // long click start below
                         var delay = 100L
                         while (true) {
-                            delay = max(delay, 60)
+                            delay = max(
+                                delay,
+                                60
+                            )
                             onClick.invoke()
                             delay(delay)
                             delay--
@@ -68,8 +71,8 @@ private fun TriggerButton(
                     }
                 }
 
-                is PressInteraction.Release ,
-                is PressInteraction.Cancel-> {
+                is PressInteraction.Release,
+                is PressInteraction.Cancel -> {
                     longPressJob?.cancel()
                 }
             }

@@ -4,10 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dev.rifqimfahmi.lazycounter.data.CounterAction
 
-class CounterViewModel: ViewModel() {
+class CounterViewModel : ViewModel() {
 
     private val _count = MutableLiveData<CounterAction>()
     val count get() = _count
+
+    private val _showResetDialog = MutableLiveData<Boolean>()
+    val showResetDialog get() = _showResetDialog
 
 
     fun increase() {
@@ -24,5 +27,13 @@ class CounterViewModel: ViewModel() {
 
     fun reset() {
         _count.value = CounterAction.Decrement(0)
+    }
+
+    fun showResetDialogConfirmation() {
+        _showResetDialog.value = true
+    }
+
+    fun hideResetDialogConfirmation() {
+        _showResetDialog.value = false
     }
 }
